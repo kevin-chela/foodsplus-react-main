@@ -31,6 +31,7 @@
     "validate": "run-p lint typecheck"
   },
   "dependencies": {
+    "@bundled-es-modules/axios": "^0.27.2",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-free": "^6.4.0",
