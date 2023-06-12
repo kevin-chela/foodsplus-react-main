@@ -2,6 +2,10 @@ import { Link } from 'react-router-dom'
 
 import { Logo } from './logo'
 
+import {useEffect } from 'react';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
+
 import CheckOut from '../component/checkout'
 
 import * as React from 'react';
@@ -77,15 +81,54 @@ const Header = ({ items }) => {
 
   console.log(cart);
 
+  //google signin
+
+  const [ user, setUser ] = useState(null);
+  const [ profile, setProfile ] = useState(null);
+
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => setUser(codeResponse),
+    onError: (error) => console.log('Login Failed:', error)
+});
+
+useEffect(
+  () => {
+      if (user) {
+          axios
+              .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                  headers: {
+                      Authorization: `Bearer ${user.access_token}`,
+                      Accept: 'application/json'
+                  }
+              })
+              .then((res) => {
+                  setProfile(res.data);
+              })
+              .catch((err) => console.log(err));
+      }
+  },
+  [ user ]
+);
+
+// log out function to log the user out of google and set the profile array to null
+
+ const logOut = () => {
+  googleLogout();
+  setProfile(null);
+};
+
+
+  
+
   return (
     <header className="fixed bg-light shadow-2xl" style={{padding: '20px'}}>
       <div className="mx-auto w-full max-w-6xl px-6 ">
         <div className="relative flex items-center justify-between">
-        <div style={{marginRight: '60%'}}>
+        <div style={{marginRight: '45%'}}>
 
           <h1 className="m-0 text-xl font-bold uppercase leading-none" >
             <Link to="/" className="flex items-center no-underline">
-              <Logo className="mr-3" /> &nbsp; &nbsp; &nbsp;ManHattan Desert
+              <Logo className="mr-2"  /> &nbsp; &nbsp; <p>ManHattan_Dessert</p>
             </Link>
           </h1>
         </div>
@@ -122,11 +165,50 @@ const Header = ({ items }) => {
 
           </Menu>
 
-          <div className='bg-info' style={{width: '50px', height: '50px', borderRadius: '8px',}} onClick={toggleShow}>
-          <MDBIcon fas icon="cart-arrow-down text-white mt-3 ml-5" style={{fontSize:20, cursor: 'pointer', marginLeft: '12px'}} />
+          <div className='bg-info ' style={{width: '55px', height: '50px', borderRadius: '8px',}} onClick={toggleShow}>
+          <MDBIcon fas icon="cart-arrow-down text-white mt-3 ml-3" style={{fontSize:20, cursor: 'pointer', marginLeft: '12px'}} />
             <div className='amount-container'>
               <p className='total-amount'>{amount}</p>
             </div> 
+          </div>
+
+          <div className='mx-5'>
+
+          {profile ? (
+                <div className="d-flex justify-end mx-2">
+                    <img src={profile.picture} alt="user image" style={{
+                      height: '55px',
+                      width: '55px',
+                      borderRadius: "50%"
+                      
+                    }} />
+                    <p className='text-sm mt-3'>&nbsp;&nbsp;{profile.email}</p>
+                    <Menu
+          id="fade-menu"
+          MenuListProps={{
+            'aria-labelledby': 'fade-button',
+          }}
+          style={{marginTop: '30px', marginLeft: '-80px'}}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          TransitionComponent={Fade}
+          >
+          <div style={{padding: 10}}>
+            <MenuItem style={{fontSize: 12}}><h3>User Logged in</h3></MenuItem>
+            <MenuItem style={{fontSize: 12}}> <p>Name: {profile.name}</p></MenuItem>
+            <MenuItem style={{fontSize: 12}}><p>Email Address: {profile.email}</p></MenuItem>
+            <MenuItem style={{fontSize: 12}}><button onClick={logOut}>Log out</button></MenuItem>
+          </div>
+
+          </Menu>      
+                    
+            </div>
+
+            ) : (
+                <button onClick={() => login()}>Sign in with Google 🚀 </button>
+            )}
+
           </div>
 
           </div>
