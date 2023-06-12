@@ -4,7 +4,7 @@ import { Logo } from './logo'
 
 import {useEffect } from 'react';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
+import axios from 'redaxios';
 
 import CheckOut from '../component/checkout'
 
