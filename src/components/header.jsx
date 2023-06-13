@@ -128,7 +128,7 @@ useEffect(
 
           <h1 className="m-0 text-xl font-bold uppercase leading-none" >
             <Link to="/" className="flex items-center no-underline">
-              <Logo className="mr-2"  /> &nbsp; &nbsp; <p>ManHattan_Dessert</p>
+              <Logo className="mr-2"  /> &nbsp; &nbsp; <p>ManHattanDessert</p>
             </Link>
           </h1>
         </div>
@@ -206,7 +206,7 @@ useEffect(
             </div>
 
             ) : (
-                <button onClick={() => login()}>Sign in with Google 🚀 </button>
+                <MDBBtn onClick={() => login()}><h5 className="font-bold  ">Sign in with Google  🚀</h5></MDBBtn>
             )}
 
           </div>
