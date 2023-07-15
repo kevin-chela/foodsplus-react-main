@@ -11,7 +11,7 @@ const initialState = {
  
 }
 
-const url = "https://kevin-chela.github.io/manhattan_desert_api/food_order.json"
+const url = ""
 console.log(url)
 
 
@@ -47,10 +47,7 @@ export default function ContextProvider({ children }) {
     dispatch({ type: 'LOADING' })
     const response = await fetch(url)
     const cart = await response.json()
-    console.log(cart)
-    console.log(cart)
-    console.log(cart)
-    console.log(cart)
+ 
     dispatch({ type: 'DISPLAY_ITEMS', payload: cart })
   }
   const toggleAmount = (id, type) => {

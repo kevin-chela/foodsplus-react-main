@@ -79,7 +79,7 @@ const Header = ({ items }) => {
     
      } = useGlobalContext()
 
-  console.log(cart);
+  console.log(amount);
 
   //google signin
 
